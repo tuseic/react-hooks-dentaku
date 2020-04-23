@@ -42,7 +42,7 @@ $ yarn start
 
 `App.js` に以下の内容を記述します．
 
-```js
+```jsx
 import React from 'react'   // react を React という名前でインポート
 
 const App = () => {         // App という定数に中括弧内で定義される関数を代入
@@ -59,7 +59,7 @@ export default App          // 関数が代入された定数 App をデフォ�
 
 `index.js` に以下の内容を記述します．
 
-```js
+```jsx
 import React from 'react'           // react を React という名前でインポート
 import { render } from 'react-dom'  // react-dom の render をインポート
 import App from './App'             // App.js のデフォルトエクスポートを App という名前でインポート
@@ -97,7 +97,7 @@ React ではこれらの一つのパーツに対して一つのファイルで�
 
 基本的に以下のテンプレートの return 部分のみを変えたものになります．
 
-```js
+```jsx
 import React from 'react'
 
 export const (ファイル名から.jsを除いたもの) = () => {
@@ -111,7 +111,7 @@ export const (ファイル名から.jsを除いたもの) = () => {
 
 `Number.js` 
 
-```js
+```jsx
 import React from 'react'
 
 export const Number = (props) => {  // (1) props は後述します
@@ -122,7 +122,7 @@ export const Number = (props) => {  // (1) props は後述します
 ```
 
 `Plus.js`
-```js
+```jsx
 import React from 'react'
 
 export const Plus = () => {
@@ -133,7 +133,7 @@ export const Plus = () => {
 ```
 
 `Equal.js`
-```js
+```jsx
 import React from 'react'
 
 export const Equal = () => {
@@ -144,7 +144,7 @@ export const Equal = () => {
 ```
 
 `Input.js`
-```js
+```jsx
 import React from 'react'
 
 export const Input = () => {
@@ -155,7 +155,7 @@ export const Input = () => {
 ```
 
 `Result.js`
-```js
+```jsx
 import React from 'react'
 
 export const Result = () => {
@@ -173,7 +173,7 @@ export const Result = () => {
 `App.js` を以下のように編集しましょう．
 
 `App.js`
-```js
+```jsx
 import React from 'react'
 import { Number } from './Number'
 import { Plus } from './Plus'
@@ -244,7 +244,7 @@ React において `var` で定義した変数をコンポーネント間でや�
 （今回作っている React アプリは `hooks` を使うことを前提としています）．  
 `useState` は状態を保持してくれる機能です．使い方の例を以下に示します．
 
-```js
+```jsx
 const [num, setNum] = useState(0)
 ```
 
@@ -262,7 +262,7 @@ const [num, setNum] = useState(0)
 以下のように `App.js` を変更しましょう．
 
 `App.js` 
-```js
+```jsx
 import React, { useState } from 'react'
 import { Number } from './Number'
 import { Plus } from './Plus'
@@ -321,7 +321,7 @@ export default App
 `Input.js` と `Result.js` を以下のように編集しましょう．
 
 `Input.js`
-```js
+```jsx
 import React from 'react'
 
 export const Input = (props) => {
@@ -332,7 +332,7 @@ export const Input = (props) => {
 ```
 
 `Result.js`
-```js
+```jsx
 import React from 'react'
 
 export const Result = (props) => {
@@ -362,7 +362,7 @@ export const Result = (props) => {
 Number コンポーネントに以下のように変更を加え以上の内容を適用します．
 
 `Number.js`
-```js
+```jsx
 import React from 'react'
 
 export const Number = (props) => {
@@ -398,7 +398,7 @@ export const Number = (props) => {
 よってそれぞれのファイルに変更を適用すると以下のようになります．
 
 `Plus.js`
-```js
+```jsx
 import React from 'react'
 
 export const Plus = (props) => {
@@ -414,7 +414,7 @@ export const Plus = (props) => {
 ```
 
 `Equal.js`
-```js
+```jsx
 import React from 'react'
 
 export const Equal = (props) => {
@@ -435,7 +435,7 @@ export const Equal = (props) => {
 
 特に新しいこともないので単純にコードを載せます．
 
-```js
+```jsx
 import React, { useState } from 'react'
 import { Number } from './Number'
 import { Plus } from './Plus'

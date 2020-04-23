@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Number } from './Number'
 import { Plus } from './Plus'
 import { Equal } from './Equal'

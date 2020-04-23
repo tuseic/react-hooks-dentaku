@@ -3,8 +3,6 @@
 これは新入生に向けに作った React チュートリアルです．  
 このリポジトリのコードが完成品です． ご質問等は`@shimehituzi`まで
 
-[toc]
-
 ## 必要な要件
 
 - コマンドラインが使用できる
@@ -34,7 +32,7 @@ $ yarn start
 
 ## React のコードを書いていく
 
-### 1. まずはエラーにならないようにしよう．
+### 1 まずはエラーにならないようにしよう．
 
 `src` フォルダの直下に `index.js`, `App.js` を作ります．
 
@@ -56,7 +54,8 @@ const App = () => {         // App という定数に中括弧内で定義され
 export default App          // 関数が代入された定数 App をデフォルトエクスポート
 ```
 
-この App を React では**コンポーネント**（厳密には関数コンポーネント）と呼びます．
+この App を React では **コンポーネント** （厳密には関数コンポーネント）と呼びます．  
+例えばこの場合 **App コンポーネント**と呼びます．
 
 `index.js` に以下の内容を記述します．
 
@@ -71,9 +70,9 @@ render(<App/>, document.getElementById('root'))  // App をレンダリングし
 これでコマンドラインで `yarn start` を行います．  
 ブラウザに Hello World と表示されていれば成功です．
 
-### 2. 電卓の見た目を作っていこう
+### 2 電卓の見た目を作っていこう
 
-#### 電卓の概要
+#### 2.1 電卓の概要
 
 今回の電卓には3種類のボタンと2種類の表示枠があります．  
 一般的な電卓とはかなり異なりますが．簡単のための処置です．
@@ -89,7 +88,7 @@ render(<App/>, document.getElementById('root'))  // App をレンダリングし
 
 React ではこれらの一つのパーツに対して一つのファイルでプログラムを書いていきます．
 
-#### 電卓のパーツ作成
+#### 2.2 電卓のパーツ作成
 
 なので以下の5つのファイルを `src` の直下に作成します．  
 `Number.js`, `Plus.js`, `Equal.js`, `Input.js`, `Result.js`
@@ -166,7 +165,7 @@ export const Result = () => {
 }
 ```
 
-#### 電卓パーツの組み立て
+#### 2.3 電卓パーツの組み立て
 
 では電卓のパーツが出来上がったので電卓を組み立てましょう．  
 組み立て場所は `App.js` です．
@@ -234,4 +233,266 @@ React のコンポーネントは『一つのタグ』（厳密には『一つ�
 括弧内のデータにアクセスできます．（今回は`数字`）．  
 結果として，`Number.js` ではボタンの中に `数字` を埋め込んで表示するのです．
 
-### 3. 電卓に機能をつけたそう
+### 3 電卓に機能をつけたそう
+
+#### 3.1 `useState` について
+
+javascript には変数 `var` が存在しますが，
+React において `var` で定義した変数をコンポーネント間でやりとりすることや，
+表示の際に用いるのは正しいとは言えません．  
+ではどうすれば良いのかというと， `hooks` を使った React アプリでは `useState` を使うべきでしょう．  
+（今回作っている React アプリは `hooks` を使うことを前提としています）．  
+`useState` は状態を保持してくれる機能です．使い方の例を以下に示します．
+
+```js
+const [num, setNum] = useState(0)
+```
+
+これは javascript の分割代入を使っています．
+分割代入の詳細は[このリンク](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)を参照してください．  
+
+`useState(引数)` とすることで `引数` を初期値とした state が生成されます．
+この `num` という state は再代入を許可しません（`const` で定義された変数なので）．
+`num` の値を変えたい場合は `setNum` を使います．
+`setNum` は関数です．例えば `setNum(2)` というコードを実行すると， `num` の値は `2` になります．
+
+#### 3.2 入力した数・計算結果を，`Input` ・ `Resut` に表示しよう
+
+`useState` を使って App コンポーネントに入力した数・計算結果を保持する state を作りましょう．  
+以下のように `App.js` を変更しましょう．
+
+`App.js` 
+```js
+import React, { useState } from 'react'
+import { Number } from './Number'
+import { Plus } from './Plus'
+import { Equal } from './Equal'
+import { Result } from './Result'
+import { Input } from './Input'
+
+const App = () => {
+  const [input, setInput] = useState(0)
+  const [result, setResult] = useState(0)
+
+  return (
+    <div>
+      <div>
+        <Number number={1}/>
+        <Number number={2}/>
+        <Number number={3}/>
+      </div>
+      <div>
+        <Number number={4}/>
+        <Number number={5}/>
+        <Number number={6}/>
+      </div>
+      <div>
+        <Number number={7}/>
+        <Number number={8}/>
+        <Number number={9}/>
+      </div>
+      <div>
+        <Number number={0}/>
+        <Plus/>
+        <Equal/>
+      </div>
+      <div>
+        <Input input={input}/>
+      </div>
+      <div>
+        <Result result={result}/>
+      </div>
+    </div>
+  )
+}
+
+export default App
+```
+
+`useState` はインポートしないと使えないので気をつけてください．
+
+`useState` などの表示しない javascript のコードは Appコンポーネント内の `return` 以前に書きましょう．
+
+`<Input input={input}/>` とすることで，Input コンポーネント内で，  
+`props.input` という具合に useState の `input` の値を用いることができます．  
+`<Result result={result}/>` も同様です．
+
+ではこの `input` と `result` の値を正しく表示するために，
+`Input.js` と `Result.js` を以下のように編集しましょう．
+
+`Input.js`
+```js
+import React from 'react'
+
+export const Input = (props) => {
+  return (
+    <div>{props.input}</div>
+  )
+}
+```
+
+`Result.js`
+```js
+import React from 'react'
+
+export const Result = (props) => {
+  return (
+    <div>Result: {props.result}</div>
+  )
+}
+```
+
+見落とした人のためもう一度補足すると， `return` 内で javascript の式を評価したい場合は
+その javascript のコードの部分を中括弧 {} で囲います．
+
+今回は state の初期値が 0 のため変更を適用しても表示される内容は変わりません．
+
+#### 3.3 数字のボタン入力を `Input` に反映しよう
+
+例えば 123 を入力したい際は 1 → 2 → 3 の順番でボタンを押します．  
+この時以下のように考えると入力を `Input` に反映することができます．
+
+- 1 を押した時 : 1
+- 2 を押した時 : 12 = 1 * 10 + 2
+- 3 を押した時 : 123 = 12 * 10 + 3
+
+つまり `前の状態 * 10 + 今押した数字` = `input * 10 + number` です．  
+これを `setInput` の引数とすれば `input` に反映されます．
+
+Number コンポーネントに以下のように変更を加え以上の内容を適用します．
+
+`Number.js`
+```js
+import React from 'react'
+
+export const Number = (props) => {
+  const clickFunc = () => {
+    props.setInput(props.input * 10 + props.number)
+  }
+
+  return (
+    <button onClick={clickFunc}>{props.number}</button>
+  )
+}
+```
+
+ここでは `clickFunc` という定数に引数の無い関数を代入しています．  
+各変数を `props` 経由で参照している以外，関数の内容は先に説明したものと同じです．
+
+さて，関数を定義しただけでは，ボタンを押しても数字は入力されません．  
+ボタンを押した時にこの関数を呼び出す必要があります．  
+この処理は簡単で `<button onClick={clickFunc}>` とするだけで，ボタンの押下時に関数を呼び出せます．
+
+`App.js` の変更点はコードが長いので次の Plus コンポーネント， Equal コンポーネントに関する変更点と共に **3.5** に記します．
+
+
+#### 3.4 `Plus` ・ `Equal` の機能を実装しよう
+
+最後に `Plus` と `Equal` の機能を実装して，電卓を完成させましょう．
+
+`Plus` では入力した数字 `input` と今までの結果 `result` を足して `result` に反映します．  
+そして，`input` を 0 にします．
+
+幸か不幸か `Equal` に関しても全く同じ実装となります．
+
+よってそれぞれのファイルに変更を適用すると以下のようになります．
+
+`Plus.js`
+```js
+import React from 'react'
+
+export const Plus = (props) => {
+  const clickFunc = () => {
+    props.setResult(props.result + props.input)
+    props.setInput(0)
+  }
+
+  return (
+    <button onClick={clickFunc}>+</button>
+  )
+}
+```
+
+`Equal.js`
+```js
+import React from 'react'
+
+export const Equal = (props) => {
+  const clickFunc = () => {
+    props.setResult(props.result + props.input)
+    props.setInput(0)
+  }
+
+  return (
+    <button onClick={clickFunc}>=</button>
+  )
+}
+```
+
+この変更は今までの知識で読めると思います．
+
+#### 3.5 `App.js` の変更点
+
+特に新しいこともないので単純にコードを載せます．
+
+```js
+import React, { useState } from 'react'
+import { Number } from './Number'
+import { Plus } from './Plus'
+import { Equal } from './Equal'
+import { Result } from './Result'
+import { Input } from './Input'
+
+const App = () => {
+  const [input, setInput] = useState(0)
+  const [result, setResult] = useState(0)
+
+  return (
+    <div>
+      <div>
+        <Number number={1} input={input} setInput={setInput}/>
+        <Number number={2} input={input} setInput={setInput}/>
+        <Number number={3} input={input} setInput={setInput}/>
+      </div>
+      <div>
+        <Number number={4} input={input} setInput={setInput}/>
+        <Number number={5} input={input} setInput={setInput}/>
+        <Number number={6} input={input} setInput={setInput}/>
+      </div>
+      <div>
+        <Number number={7} input={input} setInput={setInput}/>
+        <Number number={8} input={input} setInput={setInput}/>
+        <Number number={9} input={input} setInput={setInput}/>
+      </div>
+      <div>
+        <Number number={0} input={input} setInput={setInput}/>
+        <Plus input={input} result={result} setResult={setResult} setInput={setInput}/>
+        <Equal input={input} result={result} setResult={setResult} setInput={setInput}/>
+      </div>
+      <div>
+        <Input input={input}/>
+      </div>
+      <div>
+        <Result result={result}/>
+      </div>
+    </div>
+  )
+}
+
+export default App
+```
+
+## 完成
+
+以上で完成となります．
+
+見た目の調整，他の演算の追加など，追加できる機能はキリがないと思います．
+
+- Equal を押した後に Number → Plus としても，Equal 以前からの累計になってしまう．
+- そもそも Number → Equal → Number が足し算として機能してしまう．
+
+などの問題が Equal にはありますがその辺の修正，  
+および機能の追加は各自への課題として良いのではないでしょうか？（適当）
+
+完成形のコードはこのリポジトリの `src` にあります．  
+手元のコードが動かないときや，万が一この文章中のコードが間違っていたときはそれを参照してください．
